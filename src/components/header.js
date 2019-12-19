@@ -1,34 +1,39 @@
 import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
+import styled from "styled-components"
+import { screen, color } from "./helper"
+import { FixedLogo } from "./logo/fixedLogo"
+
+const Wrapper = styled.header`
+  height: 3.5em;
+  padding: 0 3em;
+  background-color: ${color.dimmedBlack};
+
+  display: flex;
+  align-items: center;
+
+  @media ${screen.tabletOrLarger} {
+    display: none;
+  }
+`
+
+const LogoWrapper = styled.div``
+
+const SiteTitle = styled.div`
+  color: ${color.lightBlue};
+  margin-left: 15px;
+`
 
 const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-    </div>
-  </header>
+  <Wrapper>
+    <FixedLogo />
+    <SiteTitle>
+      <Link to="/" style={{ color: color.lightBlue }}>
+        {siteTitle}
+      </Link>
+    </SiteTitle>
+  </Wrapper>
 )
 
 Header.propTypes = {
