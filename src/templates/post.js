@@ -2,10 +2,29 @@ import React from "react"
 import { graphql } from "gatsby"
 import Prism from "prismjs"
 import { useEffect } from "react"
+import styled from "styled-components"
+import { font } from "../components/helper"
 
-export default function Template({
+import Layout from "../components/layout"
+
+const PostContainer = styled.article`
+  padding: 2em 3em 0em 3em;
+`
+
+const PostTitle = styled.h1``
+
+const PostMetaData = styled.div`
+  font-style: italic;
+  font-size: ${font.small};
+`
+
+const PostContent = styled.div`
+  padding-top: 2em;
+`
+
+const PostTemplate = ({
   data, // this prop will be injected by the GraphQL query below.
-}) {
+}) => {
   const { markdownRemark } = data // data.markdownRemark holds your post data
   const { frontmatter, html } = markdownRemark
 
@@ -14,29 +33,36 @@ export default function Template({
     // call the highlightAll() function to style our code blocks
     Prism.highlightAll()
   })
-  
+
   return (
-    <div className="blog-post-container">
-      <div className="blog-post">
-        <h1>{frontmatter.title}</h1>
-        <h2>{frontmatter.date}</h2>
-        <div
-          className="blog-post-content"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      </div>
-    </div>
+    <Layout>
+      <PostContainer>
+        <PostTitle>{frontmatter.title}</PostTitle>
+        <PostMetaData>
+          {frontmatter.author}, {frontmatter.date}
+        </PostMetaData>
+        <PostContent dangerouslySetInnerHTML={{ __html: html }}></PostContent>
+      </PostContainer>
+    </Layout>
   )
 }
+
 export const pageQuery = graphql`
   query($path: String!) {
+    site {
+      siteMetadata {
+        title
+      }
+    }
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       html
       frontmatter {
         date(formatString: "MMMM DD, YYYY")
+        author
         path
         title
       }
     }
   }
 `
+export default PostTemplate
