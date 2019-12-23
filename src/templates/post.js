@@ -7,8 +7,7 @@ import { font } from "../components/helper"
 
 import Layout from "../components/layout"
 
-const PostContainer = styled.article`
-  padding: 2em 3em 0em 3em;
+const PostContainer = styled.article`  
 `
 
 const PostTitle = styled.h1``

@@ -6,7 +6,7 @@ import { screen, color } from "./helper"
 import { FixedLogo } from "./logo/fixedLogo"
 
 const Wrapper = styled.header`
-  height: 3.5em;
+  min-height: 60px;
   padding: 0 3em;
   background-color: ${color.dimmedBlack};
 

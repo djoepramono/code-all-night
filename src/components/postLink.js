@@ -4,7 +4,8 @@ import styled from "styled-components"
 import { color, font } from "./helper"
 
 const Wrapper = styled.section`
-  padding: 2em 3em 0em 3em;
+  padding-bottom: 2em;
+  padding-top: 0em;
 `
 
 const PostArticle = styled.article`

@@ -2,13 +2,14 @@ import React from "react"
 import { FluidLogo } from "./logo/fluidLogo"
 import styled from "styled-components"
 import { screen, color, font } from "./helper"
+import { Link } from "gatsby"
 
 const LogoWrapper = styled.div`
   width: 140px;
 `
 
 const Wrapper = styled.div`
-  width: 250px;
+  min-width: 250px;
   height: 100vh;
   background-color: ${color.dimmedBlack};
   color: ${color.lightBlue};
@@ -40,11 +41,19 @@ const Bottom = styled.div`
   font-size: ${font.small};
 `
 
-const Menu = styled.div`
+const Menu = styled.nav`
   padding: 5px;
 `
 
-const Sidebar = () => (
+const StyledLink = styled(Link)`
+  color: ${color.lightBlue};
+
+  ${props => props.isCurrent && css`
+    color: ${color.yellowStar};
+  `}
+`
+
+const Sidebar = ({ homeLink }) => (
   <Wrapper>
     <Top>
       <LogoWrapper>
@@ -52,7 +61,7 @@ const Sidebar = () => (
       </LogoWrapper>
     </Top>
     <Middle>
-      <Menu>BLOG</Menu>
+      <Menu><StyledLink to="/">POSTS</StyledLink></Menu>
       <Menu>PROJECTS</Menu>
       <Menu>ABOUT</Menu>
     </Middle>

@@ -15,7 +15,15 @@ const TwoColumn = styled.div`
   display: flex;
 `
 
-const Content = styled.main``
+const Content = styled.main`
+  flex-grow: 1;
+
+  padding: 2em 5em 0em 5em;
+
+  @media ${screen.phone} {
+    padding: 2em 1.5em 0em 1.5em;
+  }
+`
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -32,7 +40,7 @@ const Layout = ({ children }) => {
     <>
       <Header siteTitle={data.site.siteMetadata.title} />
       <TwoColumn>
-        <Sidebar />
+        <Sidebar homeLink="http://localhost:8000" />
         <Content>{children}</Content>
       </TwoColumn>
     </>
