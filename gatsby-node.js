@@ -54,7 +54,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   );
 
   createPage({
-    path: "/posts",
+    path: "/posts/",
     component: path.resolve(`./src/templates/clientSearch.js`),
     context: {
       search: {
