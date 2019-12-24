@@ -2,9 +2,11 @@
 const path = require(`path`)
 
 const transformRemarkEdgeToPost = edge => ({
+  path: edge.node.frontmatter.path,
   author: edge.node.frontmatter.author,
   title: edge.node.frontmatter.title,
   excerpt: edge.node.excerpt,
+  timeToRead: edge.node.timeToRead
 })
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
@@ -19,10 +21,13 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
         edges {
           node {
             frontmatter {
-              author
               title
+              date
+              author
               path
             }
+            excerpt
+            timeToRead
           }
         }
       }
@@ -49,8 +54,8 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   );
 
   createPage({
-    path: "/search",
-    component: path.resolve(`./src/templates/clientSearchTemplate.js`),
+    path: "/posts",
+    component: path.resolve(`./src/templates/clientSearch.js`),
     context: {
       search: {
         posts,

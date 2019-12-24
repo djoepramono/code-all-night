@@ -1,5 +1,8 @@
 import React, { Component } from "react"
 import * as JsSearch from "js-search"
+import { SearchForm } from "./clientSearch"
+import { SearchResult } from "./searchResult"
+
 class ClientSearch extends Component {
   state = {
     isLoading: true,
@@ -101,91 +104,24 @@ class ClientSearch extends Component {
   }
   render() {
     const { searchResults, searchQuery } = this.state
-    const { posts } = this.props
-    
+    const { posts } = this.props    
+
     const queryResults = searchQuery === "" ? posts : searchResults
     return (
       <div>
         <div style={{ margin: "0 auto" }}>
-          <form onSubmit={this.handleSubmit}>
-            <div style={{ margin: "0 auto" }}>
-              <label htmlFor="Search" style={{ paddingRight: "10px" }}>
-                Enter your search here
-              </label>
-              <input
-                id="Search"
-                value={searchQuery}
-                onChange={this.searchData}
-                placeholder="Enter your search here"
-                style={{ margin: "0 auto", width: "400px" }}
-              />
-            </div>
-          </form>
+          <SearchForm
+            searchQuery={searchQuery}
+            handleSubmit={this.handleSubmit}
+            searchData={this.searchData}
+          />
           <div>
             Number of items:
             {queryResults.length}
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                borderRadius: "4px",
-                border: "1px solid #d3d3d3",
-              }}
-            >
-              <thead style={{ border: "1px solid #808080" }}>
-                <tr>                  
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "5px",
-                      fontSize: "14px",
-                      fontWeight: 600,
-                      borderBottom: "2px solid #d3d3d3",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Book Title
-                  </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "5px",
-                      fontSize: "14px",
-                      fontWeight: 600,
-                      borderBottom: "2px solid #d3d3d3",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Book Author
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {queryResults.map((item, index) => {
-                  return (
-                    <tr key={`row_${index}`}>                      
-                      <td
-                        style={{
-                          fontSize: "14px",
-                          border: "1px solid #d3d3d3",
-                        }}
-                      >
-                        {item.title}
-                      </td>
-                      <td
-                        style={{
-                          fontSize: "14px",
-                          border: "1px solid #d3d3d3",
-                        }}
-                      >
-                        {item.author}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
           </div>
+          {queryResults.map((item, index) => 
+            <SearchResult key={index} post={item} />
+          )}
         </div>
       </div>
     )

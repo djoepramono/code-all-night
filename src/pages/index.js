@@ -30,8 +30,8 @@ const IndexPage = ({ data }) => (
   <Layout>
     <SEO title="Home" />    
     <div>
-      {data.allMarkdownRemark.edges.map(edge => {
-        return <PostLink key={edge.node.id} post={edge.node} />
+      {data.allMarkdownRemark.edges.map((edge, index) => {
+        return <PostLink key={index} post={edge.node} />
       })}
     </div>
   </Layout>
