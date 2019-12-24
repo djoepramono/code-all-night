@@ -16,6 +16,9 @@ const TwoColumn = styled.div`
 `
 
 const Content = styled.main`
+  height: 100vh;
+  overflow: auto;
+  
   flex-grow: 1;
 
   padding: 2em 5em 0em 5em;
