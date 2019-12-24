@@ -30,21 +30,25 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-fonts`,
       options: {
-        fonts: [
-          `Cabin`,          
-        ],
-        display: 'swap'
-      }
+        fonts: [`Cabin`],
+        display: "swap",
+      },
     },
-    'gatsby-plugin-react-helmet',    
+    "gatsby-plugin-react-helmet",
     {
       resolve: `gatsby-source-filesystem`,
-      options:{
+      options: {
         name: `src`,
-        path: `${__dirname}/src/posts`
-      }
+        path: `${__dirname}/src/posts`,
+      },
     },
-    'gatsby-transformer-remark',    
+    "gatsby-transformer-remark",
+    {
+      resolve: `gatsby-plugin-styled-components`,
+      options: {
+        // Add any options here
+      },
+    },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,

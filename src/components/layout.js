@@ -6,6 +6,7 @@ import Header from "./header"
 import Sidebar from "./sidebar"
 import "./layout.css"
 import styled from "styled-components"
+import  { screen } from "./helper"
 
 // f7b83d yellow
 // 242b2f black

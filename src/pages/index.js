@@ -5,6 +5,7 @@ import PostLink from "../components/postLink"
 import SEO from "../components/seo"
 import styled from "styled-components"
 import Profile from "../components/profile"
+import { graphql } from "gatsby"
 
 export const query = graphql`
   query HomePageQuery {
