@@ -1,7 +1,12 @@
 import React, { Component } from "react"
 import * as JsSearch from "js-search"
-import { SearchForm } from "./clientSearch"
+import { SearchForm } from "./searchForm"
 import { SearchResult } from "./searchResult"
+import styled from "styled-components"
+
+const SearchCount = styled.div`
+  padding-bottom: 2em;
+`;
 
 class ClientSearch extends Component {
   state = {
@@ -115,10 +120,7 @@ class ClientSearch extends Component {
             handleSubmit={this.handleSubmit}
             searchData={this.searchData}
           />
-          <div>
-            Number of items:
-            {queryResults.length}
-          </div>
+          <SearchCount>Posts found: {queryResults.length}</SearchCount>
           {queryResults.map((item, index) => 
             <SearchResult key={index} post={item} />
           )}
