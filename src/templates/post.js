@@ -18,7 +18,7 @@ const PostMetaData = styled.div`
 `
 
 const PostContent = styled.div`
-  padding-top: 2em;
+  padding-top: 0.5em;
 `
 
 const PostTemplate = ({

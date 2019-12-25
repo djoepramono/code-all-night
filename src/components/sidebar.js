@@ -47,10 +47,7 @@ const Menu = styled.nav`
 
 const StyledLink = styled(Link)`
   color: ${color.lightBlue};
-
-  ${props => props.isCurrent && css`
-    color: ${color.yellowStar};
-  `}
+  text-decoration: none;  
 `
 
 const Sidebar = ({ homeLink }) => (

@@ -5,7 +5,7 @@ import { SearchResult } from "./searchResult"
 import styled from "styled-components"
 
 const SearchCount = styled.div`
-  padding-bottom: 2em;
+  padding: 1em 0;
 `;
 
 class ClientSearch extends Component {
