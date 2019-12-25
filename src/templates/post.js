@@ -25,7 +25,7 @@ const PostTemplate = ({
   data, // this prop will be injected by the GraphQL query below.
 }) => {
   const { markdownRemark } = data // data.markdownRemark holds your post data
-  const { frontmatter, html } = markdownRemark
+  const { frontmatter, html, timeToRead } = markdownRemark
 
   //highlight
   useEffect(() => {
@@ -38,7 +38,7 @@ const PostTemplate = ({
       <PostContainer>
         <PostTitle>{frontmatter.title}</PostTitle>
         <PostMetaData>
-          {frontmatter.author}, {frontmatter.date}
+          By {frontmatter.author} {frontmatter.date} ({timeToRead} min read)
         </PostMetaData>
         <PostContent dangerouslySetInnerHTML={{ __html: html }}></PostContent>
       </PostContainer>
@@ -56,11 +56,12 @@ export const pageQuery = graphql`
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       html
       frontmatter {
-        date(formatString: "MMMM DD, YYYY")
+        date(formatString: "DD / MMMM / YYYY")
         author
         path
         title
       }
+      timeToRead
     }
   }
 `

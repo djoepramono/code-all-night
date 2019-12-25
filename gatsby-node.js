@@ -4,9 +4,10 @@ const path = require(`path`)
 const transformRemarkEdgeToPost = edge => ({
   path: edge.node.frontmatter.path,
   author: edge.node.frontmatter.author,
+  date: edge.node.frontmatter.date,
   title: edge.node.frontmatter.title,
   excerpt: edge.node.excerpt,
-  timeToRead: edge.node.timeToRead
+  timeToRead: edge.node.timeToRead,
 })
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
@@ -22,7 +23,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
           node {
             frontmatter {
               title
-              date
+              date(formatString: "DD/MMMM/YYYY")
               author
               path
             }
@@ -51,7 +52,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   // Create search page
   const posts = result.data.allMarkdownRemark.edges.map(
     transformRemarkEdgeToPost
-  );
+  )
 
   createPage({
     path: "/posts/",
