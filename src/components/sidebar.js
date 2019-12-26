@@ -58,8 +58,8 @@ const Sidebar = ({ homeLink }) => (
       </LogoWrapper>
     </Top>
     <Middle>
-      <Menu><StyledLink to="/posts/">POSTS</StyledLink></Menu>
-      <Menu>PROJECTS</Menu>
+      <Menu><StyledLink to="/list-1">POSTS</StyledLink></Menu>
+      <Menu><StyledLink to="/posts/">SEARCH</StyledLink></Menu>
       <Menu>ABOUT</Menu>
     </Middle>
     <Bottom>

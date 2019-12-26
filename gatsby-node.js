@@ -56,7 +56,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   createPage({
     path: "/posts/",
-    component: path.resolve(`./src/templates/clientSearch.js`),
+    component: path.resolve(`./src/templates/search.js`),
     context: {
       search: {
         posts,
@@ -69,5 +69,21 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
         },
       },
     },
+  })
+
+  // Create list page
+  const postsPerPage = 3
+  const noOfPages = Math.ceil(posts.length / postsPerPage)
+  Array.from({ length: noOfPages }).forEach((_, i) => {
+    createPage({
+      path: `/list-${i + 1}`,
+      component: path.resolve("./src/templates/list.js"),
+      context: {
+        limit: postsPerPage,
+        skip: i * postsPerPage,
+        noOfPages: noOfPages,
+        currentPage: i + 1,
+      },
+    })
   })
 }
