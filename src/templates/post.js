@@ -37,7 +37,7 @@ const PostTemplate = ({
       <PostContainer>
         <PostTitle>{frontmatter.title}</PostTitle>
         <PostMetaData>
-          By {frontmatter.author} {frontmatter.date} ({timeToRead} min read)
+          By {frontmatter.author}, {frontmatter.date} ({timeToRead} min read)
         </PostMetaData>
         <PostContent dangerouslySetInnerHTML={{ __html: html }}></PostContent>
       </PostContainer>
@@ -55,7 +55,7 @@ export const pageQuery = graphql`
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       html
       frontmatter {
-        date(formatString: "DD / MMMM / YYYY")
+        date(formatString: "DD MMMM YYYY")
         author
         path
         title

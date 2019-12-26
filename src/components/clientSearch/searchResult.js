@@ -39,7 +39,7 @@ export const SearchResult = ({ post }) => (
           <PostTitle>{post.title}</PostTitle>
         </CleanLink>
         <PostMetaData>
-          By {post.author} {post.date} ({post.timeToRead} min read)
+          By {post.author}, {post.date} ({post.timeToRead} min read)
         </PostMetaData>
         <PostExcerpt>{post.excerpt}</PostExcerpt>
       </PostArticle>
