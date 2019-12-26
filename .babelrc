@@ -2,9 +2,9 @@
     "presets": ["babel-preset-gatsby"],
     "plugins": [
       ["prismjs", {
-        "languages": ["javascript", "css", "markup"],
+        "languages": ["javascript", "css", "markup", "ruby"],
         "plugins": ["show-language"],
-        "theme": "okaidia",
+        "theme": "tomorrow",
         "css": true
       }]
     ]

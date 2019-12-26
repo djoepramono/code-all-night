@@ -7,10 +7,11 @@ import { font } from "../components/helper"
 
 import Layout from "../components/layout"
 
-const PostContainer = styled.article`  
-`
+const PostContainer = styled.article``
 
-const PostTitle = styled.h1``
+const PostTitle = styled.h1`
+  font-size: 40px;
+`
 
 const PostMetaData = styled.div`
   font-style: italic;
@@ -27,9 +28,7 @@ const PostTemplate = ({
   const { markdownRemark } = data // data.markdownRemark holds your post data
   const { frontmatter, html, timeToRead } = markdownRemark
 
-  //highlight
   useEffect(() => {
-    // call the highlightAll() function to style our code blocks
     Prism.highlightAll()
   })
 
