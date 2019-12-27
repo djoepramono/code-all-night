@@ -17,15 +17,15 @@ const TwoColumn = styled.div`
 `
 
 const Content = styled.main`
-  height: 100vh;
-  overflow: auto;
-  
   flex-grow: 1;
 
+  height: 100vh;
+  overflow: auto;
   padding: 2em 5em 0em 5em;
 
   @media ${screen.phone} {
     padding: 2em 1.5em 0em 1.5em;
+    height: calc(100vh - 60px);
   }
 `
 

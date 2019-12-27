@@ -28,7 +28,7 @@ const Top = styled.div`
   padding-top: 30px;
 
   display: flex;
-  justify-content: center;  
+  justify-content: center;
 `
 
 const Middle = styled.div`
@@ -47,7 +47,7 @@ const Menu = styled.nav`
 
 const StyledLink = styled(Link)`
   color: ${color.lightBlue};
-  text-decoration: none;  
+  text-decoration: none;
 `
 
 const Sidebar = ({ homeLink }) => (
