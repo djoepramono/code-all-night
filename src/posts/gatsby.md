@@ -6,7 +6,21 @@ author: "Djoe Pramono"
 tag: "gatsby, notebook"
 ---
 
-## What's the default styling used by Gatsby?
+I have been blogging in [Medium](https://medium.com/@djoepramono) for a while now. It's been great but recently the thought of having my own website came back to my mind. I had a [Jekyll](https://jekyllrb.com/) site before, but I didn't want to go back to that, at the same time I heard a lot of good things about [Gatsby](https://www.gatsbyjs.org/). So I decided to give it a try and built https://www.codeallnight.com. This blog summarises my experience so far and you can also look at the code at my [github](https://github.com/djoepramono/code-all-night)
+
+## 1. Markdown Posts
+
+
+
+## 2. Testing Locally
+
+Running the default `gatsby develop` makes the site only avaiable on the host computer via localhost. If you want to make it accessible to your phone which is on the same local network, you need to run the following.
+
+```bash
+gatsby develop -H 0.0.0.0
+```
+
+## 3. CSS Styling
 
 It's using CSS Modules,  personally though I prefer to use CSS-in-JS
 
@@ -35,15 +49,86 @@ module.exports = {
 }
 ```
 
-## How to test locally?
+## 4. Pagination
 
-For example via a phone that's in local network. You need to use run 
+The guide on the [Gatsby](https://www.gatsbyjs.org/docs/adding-pagination/) site is good enough. Basically we need to create the pages using GraphQL queries and then query GraphQL again on each page to get the needed data.
 
-```shell
-gatsby develop -H 0.0.0.0
+## 5. Client Side Search
+
+I use [js-search](https://github.com/bvaughn/js-search) to power the search page. The concept it's quite simple, during the `post` pages creation, also build the context for the search page.
+
+In your `gatsby-node.js`'s `createPages`, put the following code
+
+```js
+const transformRemarkEdgeToPost = edge => ({
+  path: edge.node.frontmatter.path,
+  author: edge.node.frontmatter.author,
+  date: edge.node.frontmatter.date,
+  title: edge.node.frontmatter.title,
+  excerpt: edge.node.excerpt,
+  timeToRead: edge.node.timeToRead,
+})
+
+const posts = result.data.allMarkdownRemark.edges.map(
+    transformRemarkEdgeToPost
+  )
+
+createPage({
+  path: "/posts/",
+  component: path.resolve(`./src/templates/clientSearch.js`),
+  context: {
+    search: {
+      posts,
+      options: {
+        indexStrategy: "Prefix match",
+        searchSanitizer: "Lower Case",
+        TitleIndex: true,
+        AuthorIndex: true,
+        SearchByTerm: true,
+      },
+    },
+  },
+})
 ```
 
-## Trailing slash
+As for the react component, you
+
+## 6. Code Highlighting
+
+To highlight code in web pages, I found [PrismJs](https://prismjs.com/) seems to be popular and easy enough to use. Based on this [tutorial](https://dev.to/fidelve/the-definitive-guide-for-using-prismjs-in-gatsby-4708), you can either use [gatsby-remark-prismjs](https://www.gatsbyjs.org/packages/gatsby-remark-prismjs/) or set it up manually like so:
+
+Install the dependencies from the command line
+
+```bash
+npm install --save prismjs \
+  babel-plugin-prismjs \
+```
+
+Set `.babelrc` in the root folder of your project
+
+```js
+{
+  "presets": ["babel-preset-gatsby"],
+  "plugins": [
+    ["prismjs", {
+      "languages": ["javascript", "css", "markup", "ruby"], // only load the languages that you intend to cover
+      "plugins": ["show-language"],
+      "theme": "tomorrow", // visit www.prismjs.com to see other theme
+      "css": true
+    }]
+  ]
+}
+```
+
+Lastly, make sure that you invoke it on your pages/templates. In my case this is `templates/post.js`
+
+```js
+useEffect(() => {    
+  Prism.highlightAll()
+})
+```
+
+## 5. Trailing slash
 
 Gatsby has a rather weird relationship with trailing slashes and that could hurt your SEO performance.
 
