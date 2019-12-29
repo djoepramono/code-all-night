@@ -1,5 +1,6 @@
 // Create page for each markdown path
 const path = require(`path`)
+const config = require("./src/libraries/canConfig")
 
 const transformRemarkEdgeToPost = edge => ({
   path: edge.node.frontmatter.path,
@@ -72,7 +73,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   })
 
   // Create list page
-  const postsPerPage = 3
+  const postsPerPage = config.noOfPostsPerPage
   const noOfPages = Math.ceil(posts.length / postsPerPage)
   Array.from({ length: noOfPages }).forEach((_, i) => {
     createPage({
@@ -85,5 +86,28 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
         currentPage: i + 1,
       },
     })
+  })
+
+  // Create index page
+  // Why? Because we want index page to have the same context as list-1
+  createPage({
+    path: "/",
+    component: path.resolve(`./src/templates/list.js`),
+    context: {
+      search: {
+        posts,
+        options: {
+          indexStrategy: "Prefix match",
+          searchSanitizer: "Lower Case",
+          TitleIndex: true,
+          AuthorIndex: true,
+          SearchByTerm: true,
+        },
+      },
+      limit: 4,
+      skip: 0,
+      noOfPages: noOfPages,
+      currentPage: 1,
+    },
   })
 }

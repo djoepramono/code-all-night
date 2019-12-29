@@ -11,6 +11,7 @@ const PostContainer = styled.article``
 
 const PostTitle = styled.h1`
   font-size: 40px;
+  line-height: 41px;
 `
 
 const PostMetaData = styled.div`

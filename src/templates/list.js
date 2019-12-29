@@ -32,18 +32,7 @@ export const blogListQuery = graphql`
       limit: $limit
       skip: $skip
     ) {
-      edges {
-        node {
-          frontmatter {
-            title
-            date(formatString: "DD MMMM YYYY")
-            author
-            path
-          }
-          excerpt
-          timeToRead
-        }
-      }
+      ...MarkdownEdgesFragment
     }
   }
 `
