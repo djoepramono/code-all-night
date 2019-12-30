@@ -12,21 +12,33 @@ const Wrapper = styled.div`
   width 100%;
 `
 
-const PaginationLink = styled(Link)`  
-  text-decoration: none;  
-  width: 200px;  
+const PaginationLink = styled(Link)`
+  text-decoration: none;
+  width: 200px;
 `
 
 const PaginationDiv = styled.div`
   width 200px;
-`;
+`
 
-const Pagination = ({ currentPage, noOfPages }) => {    
+const Pagination = ({ currentPage, noOfPages }) => {
   return (
     <Wrapper>
-      {currentPage !== 1 ? (<PaginationLink to={`/list-${currentPage - 1}`}>Previous</PaginationLink>) : <PaginationDiv />}
-      <PaginationDiv>{currentPage}</PaginationDiv>
-      {currentPage !== noOfPages ? (<PaginationLink to={`/list-${currentPage + 1}`}>Next </PaginationLink>) : <PaginationDiv />}
+      {currentPage !== 1 ? (
+        <PaginationLink to={`/list-${currentPage - 1}`}>
+          Previous
+        </PaginationLink>
+      ) : (
+        <PaginationDiv />
+      )}
+      <PaginationDiv>
+        Page {currentPage} of {noOfPages}
+      </PaginationDiv>
+      {currentPage !== noOfPages ? (
+        <PaginationLink to={`/list-${currentPage + 1}`}>Next </PaginationLink>
+      ) : (
+        <PaginationDiv />
+      )}
     </Wrapper>
   )
 }
