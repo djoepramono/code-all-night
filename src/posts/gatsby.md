@@ -145,50 +145,6 @@ createPage({
 
 As for the react component, you
 
-## 7. Code Highlighting
-
-For example via a phone that's in local network. You need to use run 
-
-## 5. Client Side Search
-
-I use [js-search](https://github.com/bvaughn/js-search) to power the search page. The concept it's quite simple, during the `post` pages creation, also build the context for the search page.
-
-In your `gatsby-node.js`'s `createPages`, put the following code
-
-```js
-const transformRemarkEdgeToPost = edge => ({
-  path: edge.node.frontmatter.path,
-  author: edge.node.frontmatter.author,
-  date: edge.node.frontmatter.date,
-  title: edge.node.frontmatter.title,
-  excerpt: edge.node.excerpt,
-  timeToRead: edge.node.timeToRead,
-})
-
-const posts = result.data.allMarkdownRemark.edges.map(
-    transformRemarkEdgeToPost
-  )
-
-createPage({
-  path: "/posts/",
-  component: path.resolve(`./src/templates/clientSearch.js`),
-  context: {
-    search: {
-      posts,
-      options: {
-        indexStrategy: "Prefix match",
-        searchSanitizer: "Lower Case",
-        TitleIndex: true,
-        AuthorIndex: true,
-        SearchByTerm: true,
-      },
-    },
-  },
-})
-```
-
-As for the react component, you
-
 Combining client side search with server rendered pagination in one page however is not straightforward. Both of them can be made to render two different thing, but at this point i'm not sure.
 
 ## 6. Code Highlighting
