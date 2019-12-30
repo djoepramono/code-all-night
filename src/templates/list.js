@@ -15,7 +15,9 @@ const ListPage = props => {
   const { noOfPages, currentPage, search } = pageContext
   return (
     <Layout>
-      <ClientSearch posts={posts} engine={search.options} />
+      {posts.map((post, index) => {
+        return <SearchResult key={index} post={post} />
+      })}
       <Pagination currentPage={currentPage} noOfPages={noOfPages} />
     </Layout>
   )
@@ -23,8 +25,8 @@ const ListPage = props => {
 
 export default ListPage
 
-export const blogListQuery = graphql`
-  query blogListQuery($skip: Int!, $limit: Int!) {
+export const listQuery = graphql`
+  query listQuery($skip: Int!, $limit: Int!) {
     allMarkdownRemark(
       sort: { fields: [frontmatter___date], order: DESC }
       limit: $limit
