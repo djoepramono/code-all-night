@@ -60,7 +60,7 @@ const Sidebar = ({ homeLink }) => (
     <Middle>
       <Menu><StyledLink to="/list-1">POSTS</StyledLink></Menu>
       <Menu><StyledLink to="/posts/">SEARCH</StyledLink></Menu>
-      <Menu>ABOUT</Menu>
+      <Menu><StyledLink to="/about">ABOUT</StyledLink></Menu>
     </Middle>
     <Bottom>
       <div>Code All Night</div>

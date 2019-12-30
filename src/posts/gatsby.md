@@ -149,8 +149,81 @@ As for the react component, you
 
 For example via a phone that's in local network. You need to use run 
 
-```shell
-gatsby develop -H 0.0.0.0
+## 5. Client Side Search
+
+I use [js-search](https://github.com/bvaughn/js-search) to power the search page. The concept it's quite simple, during the `post` pages creation, also build the context for the search page.
+
+In your `gatsby-node.js`'s `createPages`, put the following code
+
+```js
+const transformRemarkEdgeToPost = edge => ({
+  path: edge.node.frontmatter.path,
+  author: edge.node.frontmatter.author,
+  date: edge.node.frontmatter.date,
+  title: edge.node.frontmatter.title,
+  excerpt: edge.node.excerpt,
+  timeToRead: edge.node.timeToRead,
+})
+
+const posts = result.data.allMarkdownRemark.edges.map(
+    transformRemarkEdgeToPost
+  )
+
+createPage({
+  path: "/posts/",
+  component: path.resolve(`./src/templates/clientSearch.js`),
+  context: {
+    search: {
+      posts,
+      options: {
+        indexStrategy: "Prefix match",
+        searchSanitizer: "Lower Case",
+        TitleIndex: true,
+        AuthorIndex: true,
+        SearchByTerm: true,
+      },
+    },
+  },
+})
+```
+
+As for the react component, you
+
+Combining client side search with server rendered pagination in one page however is not straightforward. Both of them can be made to render two different thing, but at this point i'm not sure.
+
+## 6. Code Highlighting
+
+To highlight code in web pages, I found [PrismJs](https://prismjs.com/) seems to be popular and easy enough to use. Based on this [tutorial](https://dev.to/fidelve/the-definitive-guide-for-using-prismjs-in-gatsby-4708), you can either use [gatsby-remark-prismjs](https://www.gatsbyjs.org/packages/gatsby-remark-prismjs/) or set it up manually like so:
+
+Install the dependencies from the command line
+
+```bash
+npm install --save prismjs \
+  babel-plugin-prismjs \
+```
+
+Set `.babelrc` in the root folder of your project
+
+```js
+{
+  "presets": ["babel-preset-gatsby"],
+  "plugins": [
+    ["prismjs", {
+      "languages": ["javascript", "css", "markup", "ruby"], // only load the languages that you intend to cover
+      "plugins": ["show-language"],
+      "theme": "tomorrow", // visit www.prismjs.com to see other theme
+      "css": true
+    }]
+  ]
+}
+```
+
+Lastly, make sure that you invoke it on your pages/templates. In my case this is `templates/post.js`
+
+```js
+useEffect(() => {    
+  Prism.highlightAll()
+})
 ```
 
 ## 8. Trailing slash
