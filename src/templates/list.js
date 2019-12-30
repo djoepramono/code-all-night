@@ -4,6 +4,7 @@ import Layout from "../components/layout"
 import { SearchResult } from "../components/clientSearch/searchResult"
 import { transformRemarkEdgeToPost } from "../libraries/transformer"
 import Pagination from "../components/pagination"
+import ClientSearch from "../components/clientSearch/index"
 
 const ListPage = props => {
   const posts = props.data.allMarkdownRemark.edges.map(
@@ -11,13 +12,10 @@ const ListPage = props => {
   )
 
   const { pageContext } = props
-  const { noOfPages, currentPage } = pageContext    
-
+  const { noOfPages, currentPage, search } = pageContext
   return (
     <Layout>
-      {posts.map((post, index) => {
-        return <SearchResult key={index} post={post} />
-      })}
+      <ClientSearch posts={posts} engine={search.options} />
       <Pagination currentPage={currentPage} noOfPages={noOfPages} />
     </Layout>
   )

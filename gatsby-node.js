@@ -11,6 +11,33 @@ const transformRemarkEdgeToPost = edge => ({
   timeToRead: edge.node.timeToRead,
 })
 
+const createSearchPageParameter = (
+  routePath,
+  templatePath,
+  posts,
+  noOfPostsPerPage,
+  currentPageIndex
+) => ({
+  path: routePath,
+  component: path.resolve(templatePath),
+  context: {
+    search: {
+      posts,
+      options: {
+        indexStrategy: "Prefix match",
+        searchSanitizer: "Lower Case",
+        TitleIndex: true,
+        AuthorIndex: true,
+        SearchByTerm: true,
+      },
+    },
+    limit: noOfPostsPerPage,
+    skip: currentPageIndex * noOfPostsPerPage,
+    noOfPages: Math.ceil(posts.length / noOfPostsPerPage),
+    currentPage: currentPageIndex + 1,
+  },
+})
+
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions
   const blogPostTemplate = path.resolve(`src/templates/post.js`)
@@ -76,38 +103,26 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   const postsPerPage = config.noOfPostsPerPage
   const noOfPages = Math.ceil(posts.length / postsPerPage)
   Array.from({ length: noOfPages }).forEach((_, i) => {
-    createPage({
-      path: `/list-${i + 1}`,
-      component: path.resolve("./src/templates/list.js"),
-      context: {
-        limit: postsPerPage,
-        skip: i * postsPerPage,
-        noOfPages: noOfPages,
-        currentPage: i + 1,
-      },
-    })
+    createPage(
+      createSearchPageParameter(
+        `/list-${i + 1}`,
+        "./src/templates/list.js",
+        posts,
+        postsPerPage,
+        i
+      )
+    )
   })
 
   // Create index page
   // Why? Because we want index page to have the same context as list-1
-  createPage({
-    path: "/",
-    component: path.resolve(`./src/templates/list.js`),
-    context: {
-      search: {
-        posts,
-        options: {
-          indexStrategy: "Prefix match",
-          searchSanitizer: "Lower Case",
-          TitleIndex: true,
-          AuthorIndex: true,
-          SearchByTerm: true,
-        },
-      },
-      limit: 4,
-      skip: 0,
-      noOfPages: noOfPages,
-      currentPage: 1,
-    },
-  })
+  createPage(
+    createSearchPageParameter(
+      "/",
+      "./src/templates/list.js",
+      posts,
+      postsPerPage,
+      0
+    )
+  )
 }

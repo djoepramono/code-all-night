@@ -12,7 +12,7 @@ const SearchPage = props => {
 
   return (
     <Layout>
-      <ClientSearch posts={posts} engine={options} />      
+      <ClientSearch posts={posts} engine={options} />
     </Layout>
   )
 }
