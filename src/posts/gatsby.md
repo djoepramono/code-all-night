@@ -8,8 +8,20 @@ tag: "gatsby, notebook"
 
 I have been blogging in [Medium](https://medium.com/@djoepramono) for a while now. It's been great but recently the thought of having my own website came back to my mind. I had a [Jekyll](https://jekyllrb.com/) site before, but I didn't want to go back to that, at the same time I heard a lot of good things about [Gatsby](https://www.gatsbyjs.org/). So I decided to give it a try and built https://www.codeallnight.com. This blog summarises my experience so far and you can also look at the code at my [github](https://github.com/djoepramono/code-all-night)
 
+## Prerequisite
+
+```
+npm install --save-dev gatsby-cli
+```
+
 ## 1. Markdown Posts
 
+Markdown files can be made into pages in Gatsby with the help of [gatsby-transformer-remark](https://www.gatsbyjs.org/packages/gatsby-transformer-remark/)
+
+```
+npm install --save gatsby-transformer-remark \
+  gatsby-source-filesystem
+```
 
 ## 2. Testing Locally
 
@@ -21,7 +33,7 @@ gatsby develop -H 0.0.0.0
 
 ## 3. CSS Styling
 
-It's using CSS Modules,  personally though I prefer to use CSS-in-JS
+It's using CSS Modules, personally though I prefer to use CSS-in-JS
 
 There's a gotcha though. From my experience, the css would work with `gatsby develop`. But in production, sometimes it is not there. This happens most often on the first page load.
 
@@ -29,8 +41,8 @@ The solution
 
 ```bash
 npm install --save gatsby-plugin-styled-components \
-    styled-components \
-    babel-plugin-styled-components
+  styled-components \
+  babel-plugin-styled-components
 ```
 
 and make sure `gatsby-config.js` has the following
@@ -70,7 +82,7 @@ export const query = graphql`
 
 `MarkdownEdgesFragment` are not explicitly imported/interpolated anywhere and yet it can be used in the GraphQL query. It's magic.
 
-However `context` can be injected into Gatsby's GraphQL queries.  Have a look at `skip` and `limit` at the pagination query below.
+However `context` can be injected into Gatsby's GraphQL queries. Have a look at `skip` and `limit` at the pagination query below.
 
 ```js
   query blogListQuery($skip: Int!, $limit: Int!) {
@@ -84,21 +96,21 @@ However `context` can be injected into Gatsby's GraphQL queries.  Have a look at
   }
 ```
 
-These context can **only** be created via Gatsby `createPage`. It's kind of a bummer, unless I'm reading [this]((https://www.gatsbyjs.org/docs/page-query/)) wrong.
+These context can **only** be created via Gatsby `createPage`. It's kind of a bummer, unless I'm reading [this](<(https://www.gatsbyjs.org/docs/page-query/)>) wrong.
 
 ```js
 Array.from({ length: noOfPages }).forEach((_, i) => {
-    createPage({
-      path: `/list-${i + 1}`,
-      component: path.resolve("./src/templates/list.js"),
-      context: {
-        limit: postsPerPage,
-        skip: i * postsPerPage,
-        noOfPages: noOfPages,
-        currentPage: i + 1,
-      },
-    })
+  createPage({
+    path: `/list-${i + 1}`,
+    component: path.resolve("./src/templates/list.js"),
+    context: {
+      limit: postsPerPage,
+      skip: i * postsPerPage,
+      noOfPages: noOfPages,
+      currentPage: i + 1,
+    },
   })
+})
 ```
 
 ## 5. Pagination
@@ -121,9 +133,7 @@ const transformRemarkEdgeToPost = edge => ({
   timeToRead: edge.node.timeToRead,
 })
 
-const posts = result.data.allMarkdownRemark.edges.map(
-    transformRemarkEdgeToPost
-  )
+const posts = result.data.allMarkdownRemark.edges.map(transformRemarkEdgeToPost)
 
 createPage({
   path: "/posts/",
@@ -177,7 +187,7 @@ Set `.babelrc` in the root folder of your project
 Lastly, make sure that you invoke it on your pages/templates. In my case this is `templates/post.js`
 
 ```js
-useEffect(() => {    
+useEffect(() => {
   Prism.highlightAll()
 })
 ```
@@ -199,19 +209,19 @@ module.exports = {
   plugins: [
     {
       resolve: `gatsby-plugin-google-analytics`,
-      options: {        
-        trackingId: "UA-66674350-3",
+      options: {
+        trackingId: "YOUR_GOOGLE_ANALYTICS_TRACKING_ID",
         // Defines where to place the tracking script - `true` in the head and `false` in the body
         head: false,
-        anonymize: true,       
-        respectDNT: true,                
-        pageTransitionDelay: 0,        
+        anonymize: true,
+        respectDNT: true,
+        pageTransitionDelay: 0,
         sampleRate: 5,
         siteSpeedSampleRate: 10,
         cookieDomain: "codeallnight.com",
       },
-    }
-  ]
+    },
+  ],
 }
 ```
 
@@ -223,7 +233,7 @@ Gatsby has a rather weird relationship with trailing slashes and that could hurt
 
 Any pages created in `pages` folder e.g. `pages/page-2.js` is created as `public/page-2/index.html` which means some HTTP server would serve the page as `http://www.codeallnight.com/page-2/`. Notice the trailing slash! By default you cannot remove this.
 
-How about pages created using `gatsby-node.js`'s `createPages`? It the same. For example the markdown in `posts` folder would be created as `posts/markdown-title/index.html` or `posts/markdown-title/`. 
+How about pages created using `gatsby-node.js`'s `createPages`? It the same. For example the markdown in `posts` folder would be created as `posts/markdown-title/index.html` or `posts/markdown-title/`.
 
 The fun part though, if you try to access the page through the client redirection and not server render, you might notice that the url on your browser doesn't indicate that there's a redirection. For example from `http://www.codeallnight.com/posts/` to `http/www.codeallnight.com/posts/gatsby`, there is no trailing slash in the end of the url. However if you refresh the page, you'll see that the url now has a trailing slash.
 
