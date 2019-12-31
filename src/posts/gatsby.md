@@ -182,6 +182,41 @@ useEffect(() => {
 })
 ```
 
+## 7. Google Analytics
+
+A website without any tracking is not complete. Google Analytics is probably one of the easiest tracking tool to use and so far [this guide](https://www.gatsbyjs.org/packages/gatsby-plugin-google-analytics/) is good enough.
+
+Basically install the plugin
+
+```bash
+npm install --save gatsby-plugin-google-analytics
+```
+
+and add the following to `gatsby-config.js`
+
+```js
+module.exports = {
+  plugins: [
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {        
+        trackingId: "UA-66674350-3",
+        // Defines where to place the tracking script - `true` in the head and `false` in the body
+        head: false,
+        anonymize: true,       
+        respectDNT: true,                
+        pageTransitionDelay: 0,        
+        sampleRate: 5,
+        siteSpeedSampleRate: 10,
+        cookieDomain: "codeallnight.com",
+      },
+    }
+  ]
+}
+```
+
+And that's it! You don't need to copy paste the tracking script from Google, the plugin will create the equivalent script for you.
+
 ## 8. Trailing slash
 
 Gatsby has a rather weird relationship with trailing slashes and that could hurt your SEO performance.

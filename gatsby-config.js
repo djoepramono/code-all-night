@@ -49,6 +49,20 @@ module.exports = {
         // Add any options here
       },
     },
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {        
+        trackingId: "UA-66674350-3",
+        // Defines where to place the tracking script - `true` in the head and `false` in the body
+        head: false,
+        anonymize: true,       
+        respectDNT: true,                
+        pageTransitionDelay: 0,        
+        sampleRate: 5,
+        siteSpeedSampleRate: 10,
+        cookieDomain: "codeallnight.com",
+      },
+    },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
