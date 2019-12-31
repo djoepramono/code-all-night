@@ -6,16 +6,18 @@ import { screen, color } from "./helper"
 import { FixedLogo } from "./logo/fixedLogo"
 
 const Wrapper = styled.header`
+  @media ${screen.tabletOrLarger} {
+    display: none;
+  }
+`
+
+const HeaderStrip = styled.div`
   min-height: 60px;
   padding: 0 1.5em;
   background-color: ${color.dimmedBlack};
 
   display: flex;
   align-items: center;
-
-  @media ${screen.tabletOrLarger} {
-    display: none;
-  }
 `
 
 const LogoWrapper = styled.div``
@@ -30,24 +32,28 @@ const HeaderLink = styled(Link)`
 const HeaderMenu = styled.div`
   color: ${color.lightBlue};
   width: 100px;
-  padding: 0.5em;
+  padding: 0.5em;  
 `
 
 const MenuDropDown = styled.div`
+  flex-direction: column;
+
   background-color: ${color.dimmedBlack};
   width: 100px;
   color: ${color.lightBlue};
   position: absolute;
   right: 1.5em;
-  ${props => (props.visible ? "display: block" : "display: none")};
+  ${props =>
+    props.isExpanded
+      ? `display: flex; background-color: ${color.lightBlue};`
+      : "display: none"};
 `
 
 const MenuDropDownLink = styled(Link)`
-  display: flex;
-  flex-direction: row;
-  color: inherit;
+  color: ${color.dimmedBlack};
   text-decoration: none;
   padding: 0.5em;
+  border-bottom: 1px solid ${color.dimmedBlack};
 `
 
 class Header extends React.Component {
@@ -55,27 +61,29 @@ class Header extends React.Component {
     super(props)
 
     this.state = {
-      isMenuCollapsed: false,
+      isMenuExpanded: false,
     }
   }
 
   toggleMenu = e => {
-    this.setState({ isMenuCollapsed: !this.state.isMenuCollapsed })
+    this.setState({ isMenuExpanded: !this.state.isMenuExpanded })
   }
 
   render() {
     return (
-      <>
-        <Wrapper>
+      <Wrapper>
+        <HeaderStrip>
           <FixedLogo />
           <HeaderLink to="/">{this.props.siteTitle}</HeaderLink>
-          <HeaderMenu onClick={this.toggleMenu}>More</HeaderMenu>
-        </Wrapper>
-        <MenuDropDown visible={this.state.isMenuCollapsed}>
+          <HeaderMenu isExpanded={this.state.isMenuExpanded} onClick={this.toggleMenu}>
+            {this.state.isMenuExpanded ? `Less` : `More`}
+          </HeaderMenu>
+        </HeaderStrip>
+        <MenuDropDown isExpanded={this.state.isMenuExpanded}>
           <MenuDropDownLink to="/posts">Search</MenuDropDownLink>
-          <MenuDropDownLink to="/posts">About</MenuDropDownLink>
+          <MenuDropDownLink to="/about">About</MenuDropDownLink>
         </MenuDropDown>
-      </>
+      </Wrapper>
     )
   }
 }
