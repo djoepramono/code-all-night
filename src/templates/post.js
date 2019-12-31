@@ -4,8 +4,8 @@ import Prism from "prismjs"
 import { useEffect } from "react"
 import styled from "styled-components"
 import { font } from "../components/helper"
-
 import Layout from "../components/layout"
+import SEO from "../components/seo"
 
 const PostContainer = styled.article``
 
@@ -35,6 +35,7 @@ const PostTemplate = ({
 
   return (
     <Layout>
+      <SEO title={frontmatter.title} />
       <PostContainer>
         <PostTitle>{frontmatter.title}</PostTitle>
         <PostMetaData>
