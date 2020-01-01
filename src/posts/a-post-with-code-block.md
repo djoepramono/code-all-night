@@ -1,10 +1,8 @@
 ---
-path: "/posts/my-first-post"
-title: "My First Post"
+path: "/posts/a-post-with-code-block"
+title: "A Post with Code Block"
 date: "2019-12-07"
 author: "JP"
-tag: "hshs"
-test: "fdsafdsafd"
 ---
 
 It's night time now but let's blog. Wohoo yeaha

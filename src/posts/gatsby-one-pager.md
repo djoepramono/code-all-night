@@ -6,11 +6,18 @@ author: "Djoe Pramono"
 tag: "gatsby, notebook"
 ---
 
-I have been blogging in [Medium](https://medium.com/@djoepramono) for a while now. It's been great but recently the thought of having my own website came back to my mind. I had a [Jekyll](https://jekyllrb.com/) site before, but I didn't want to go back to that, at the same time I heard a lot of good things about [Gatsby](https://www.gatsbyjs.org/). So I decided to give it a try and built https://www.codeallnight.com. This blog summarises my experience so far and you can also look at the code at my [github](https://github.com/djoepramono/code-all-night)
+How to build a Gatsby site? Why the guides online are so fragmented? Isn't there a one pager guide for [Gatsby](https://www.gatsbyjs.org/)? Well you have found it. This guide would help you build a gatsby with:
+- [x] Client side search
+- [x] Pagination
+- [x] Google Analytics
+- [x] Code Highlighting
+- [x] Responsive design, _well we won't really cover this but you can look at the Github code._
+
+If you'd like to see a working example, you can head off to https://www.codeallnight.com or take a peek at the [git repo](https://github.com/djoepramono/code-all-night) Well in fact, this guide will refer to it quite often.
 
 ## Prerequisite
 
-```
+```bash
 npm install --save-dev gatsby-cli
 ```
 
@@ -112,6 +119,10 @@ Array.from({ length: noOfPages }).forEach((_, i) => {
   })
 })
 ```
+
+On another twist
+
+https://github.com/gatsbyjs/gatsby/issues/12155
 
 ## 5. Pagination
 

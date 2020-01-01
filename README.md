@@ -18,3 +18,9 @@ gatsby develop
 ```
 
 For more information please refer to the [guide](https://www.codeallnight.com/posts/gatsby-one-pager)
+
+# Screenshots
+
+![pagination](./img/can-pagination.png)
+![search](./img/can-search.png)
+![codeblock-mobile](./img/can-mobile-codeblock.png)
