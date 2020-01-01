@@ -11,7 +11,7 @@ const transformRemarkEdgeToPost = edge => ({
   timeToRead: edge.node.timeToRead,
 })
 
-const createSearchPageParameter = (
+const createListPageParameter = (
   routePath,
   templatePath,
   posts,
@@ -21,16 +21,6 @@ const createSearchPageParameter = (
   path: routePath,
   component: path.resolve(templatePath),
   context: {
-    search: {
-      posts,
-      options: {
-        indexStrategy: "Prefix match",
-        searchSanitizer: "Lower Case",
-        TitleIndex: true,
-        AuthorIndex: true,
-        SearchByTerm: true,
-      },
-    },
     limit: noOfPostsPerPage,
     skip: currentPageIndex * noOfPostsPerPage,
     noOfPages: Math.ceil(posts.length / noOfPostsPerPage),
@@ -104,7 +94,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   const noOfPages = Math.ceil(posts.length / postsPerPage)
   Array.from({ length: noOfPages }).forEach((_, i) => {
     createPage(
-      createSearchPageParameter(
+      createListPageParameter(
         `/list-${i + 1}`,
         "./src/templates/list.js",
         posts,
@@ -117,7 +107,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   // Create index page
   // Why? Because we want index page to have the same context as list-1
   createPage(
-    createSearchPageParameter(
+    createListPageParameter(
       "/",
       "./src/templates/list.js",
       posts,
