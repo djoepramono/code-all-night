@@ -7,6 +7,8 @@ tag: "gatsby, notebook"
 ---
 
 How to build a Gatsby site? Why the guides online are so fragmented? Isn't there a one pager guide for [Gatsby](https://www.gatsbyjs.org/)? Well you have found it. This guide would help you build a gatsby with:
+
+- [x] Markdown based blog post
 - [x] Client side search
 - [x] Pagination
 - [x] Google Analytics
@@ -15,28 +17,255 @@ How to build a Gatsby site? Why the guides online are so fragmented? Isn't there
 
 If you'd like to see a working example, you can head off to https://www.codeallnight.com or take a peek at the [git repo](https://github.com/djoepramono/code-all-night) Well in fact, this guide will refer to it quite often.
 
-## Prerequisite
+## 1. Prerequisite
+
+First thing first, make sure you have `gatsby-cli` installed and then you can clone the repo and start the development server.
 
 ```bash
-npm install --save-dev gatsby-cli
+npm install -g gatsby-cli
+git clone git@github.com:djoepramono/code-all-night.git
+cd code-all-night
+npm install
+gatsby develop -H 0.0.0.0
 ```
 
-## 1. Markdown Posts
+Running `gatsby develop` only, makes the site only avaiable on the host computer via localhost. But sometimes you want to make it accessible to your local network, so that you can test your site with your mobile phone. For this, you need the `-H 0.0.0.0`.
+
+## 2. Markdown Posts
 
 Markdown files can be made into pages in Gatsby with the help of [gatsby-transformer-remark](https://www.gatsbyjs.org/packages/gatsby-transformer-remark/)
 
-```bash
-npm install --save gatsby-transformer-remark \
-  gatsby-source-filesystem
+Put the markdown files into `src/posts`, there is some example there already. Next up you need to put the following entry into `gatsby-node.js`
+
+```js
+exports.createPages = async ({ actions, graphql, reporter }) => {
+  const { createPage } = actions
+  const blogPostTemplate = path.resolve(`src/templates/post.js`)
+  const result = await graphql(`
+    {
+      allMarkdownRemark(
+        sort: { order: DESC, fields: [frontmatter___date] }
+        limit: 1000
+      ) {
+        edges {
+          node {
+            frontmatter {
+              title
+              date(formatString: "DD MMMM YYYY")
+              author
+              path
+            }
+            excerpt
+            timeToRead
+          }
+        }
+      }
+    }
+  `)
+  // Handle errors
+  if (result.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`)
+    return
+  }
+
+  // Create post pages
+  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
+    createPage({
+      path: node.frontmatter.path,
+      component: blogPostTemplate,
+      context: {}, // additional data can be passed via context
+    })
+  })
+}
 ```
 
-## 2. Testing Locally
+The code above is utilising Gatsby's `createPages` API to create a static page for each markdown posts. Frontmatter is the key value pair that exists on top of each markdown file. They are basically meta data for the markdown files.
 
-Running the default `gatsby develop` makes the site only avaiable on the host computer via localhost. If you want to make it accessible to your phone which is on the same local network, you need to run the following.
+If you want to play around with the GraphQL queries you can head out to http://localhost:8000/__graphql. Gatsby has a UI GraphQL client that is not bad. If you already know about GraphQL then great, if not you can learn more from [here](https://www.gatsbyjs.org/docs/graphql-concepts/)
 
-```bash
-gatsby develop -H 0.0.0.0
+And if you want to change the template, you might've guessed by now, you can change `src/templates/posts`. It's a React component, so go nuts if you are already familiar with [React](https://reactjs.org/).
+
+All right, by now you should know what `createPages` does.
+
+## 2. Client Side Search
+
+Before we are talking about pagination, let's talk about search first. Code All Night is using [js-search](https://github.com/bvaughn/js-search) to power the search page. The concept is quite simple, during the `post` pages creation, also build the context for the search page. If you want to learn more [here](https://www.gatsbyjs.org/docs/adding-search-with-js-search/) is the guide that helped me get started.
+
+In your `gatsby-node.js`'s `createPages`, put the following code
+
+```js
+const posts = result.data.allMarkdownRemark.edges.map(transformRemarkEdgeToPost)
+
+createPage({
+  path: "/posts/",
+  component: path.resolve(`./src/templates/clientSearch.js`),
+  context: {
+    search: {
+      posts,
+      options: {
+        indexStrategy: "Prefix match",
+        searchSanitizer: "Lower Case",
+        TitleIndex: true,
+        AuthorIndex: true,
+        SearchByTerm: true,
+      },
+    },
+  },
+})
 ```
+
+Where `transformRemarkEdgeToPost` is just simple data transformation as follows
+
+```js
+const transformRemarkEdgeToPost = edge => ({
+  path: edge.node.frontmatter.path,
+  author: edge.node.frontmatter.author,
+  date: edge.node.frontmatter.date,
+  title: edge.node.frontmatter.title,
+  excerpt: edge.node.excerpt,
+  timeToRead: edge.node.timeToRead,
+})
+```
+
+The search here is a client side search. Meaning it doesn't talk to the server during the search as the javascript client already know the whole `context`, which is passed into the pages via `createPages`. This makes the search very responsive. Try it out!
+
+Now you hopefully you know the concept of passing data into pages via `context`. As for the templates, it's using a [React class component])(https://reactjs.org/docs/react-component.html), as it will need to use state. As for the component itself, in Code All Night, it's available in `components/clientSearch`.
+
+## 3. List Page with Pagination
+
+Next up we are going to create a list page with pagination. Put the following into `gatsby-node.js`'s `createPages` function
+
+```js
+const postsPerPage = config.noOfPostsPerPage
+const noOfPages = Math.ceil(posts.length / postsPerPage)
+Array.from({ length: noOfPages }).forEach((_, i) => {
+  createPage(
+    createListPageParameter(
+      `/list-${i + 1}`,
+      "./src/templates/list.js",
+      posts,
+      postsPerPage,
+      i
+    )
+  )
+})
+```
+
+where `createListPageParameter` is yet another function that transform data
+
+```js
+const createListPageParameter = (
+  routePath,
+  templatePath,
+  posts,
+  noOfPostsPerPage,
+  currentPageIndex
+) => ({
+  path: routePath,
+  component: path.resolve(templatePath),
+  context: {
+    limit: noOfPostsPerPage,
+    skip: currentPageIndex * noOfPostsPerPage,
+    noOfPages: Math.ceil(posts.length / noOfPostsPerPage),
+    currentPage: currentPageIndex + 1,
+  },
+})
+```
+
+Now since we want to have the index page / landing page to be the same with the list page. We need to create it the same way in `gatsby-node.js`.
+
+```js
+createPage(
+  createListPageParameter(
+    "/",
+    "./src/templates/list.js",
+    posts,
+    postsPerPage,
+    0
+  )
+)
+```
+
+So far so good, now as you can see the `context` passed contains things like `limit`, `skip`, `noOfPages`, and `currentPage`. This metadata is then used in the template to invoke yet another GraphQL query as seen in the `src/templates/list.js`
+
+```js
+export const listQuery = graphql`
+  query listQuery($skip: Int!, $limit: Int!) {
+    allMarkdownRemark(
+      sort: { fields: [frontmatter___date], order: DESC }
+      limit: $limit
+      skip: $skip
+    ) {
+      ...MarkdownEdgesFragment
+    }
+  }
+`
+```
+
+This result of the call is then available in the bespoke React component's `props.data.allMarkdownRemark.edges`
+
+What do learn here? It's possible after you passed some metadata to the page through `context`, you can use it to make another GraphQL call. This is a powerful concept which allows you to do extra things in the page.
+
+But what is `...MarkdownEdgesFragment`? It's GraphQL [fragment](https://www.apollographql.com/docs/react/data/fragments/). But it behaves slightly differently in Gatsby.
+
+## 4.Fragment
+
+For the better or worse, Gatsby is using their own version of GraphQL. That's why on the file where a GraphQL query is executed, usually there's this import
+
+```js
+import { graphql } from "gatsby"
+```
+
+Gatsby handles GraphQL fragments in slightly different way than standard GraphQL. Normally GraphQL fragments are imported, interpolated at the top of the GraphQL query and then used by spreading it. In Gatsby's GraphQL, the first and second steps are not needed as Gatsby crawls through all of your files and makes all fragments available in the query automagically.
+
+```graphql
+export const query = graphql`
+  query HomePageQuery {
+    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+      ...MarkdownEdgesFragment
+    }
+  }
+`
+```
+
+`MarkdownEdgesFragment` are not explicitly imported/interpolated anywhere and yet it can be used in the GraphQL query. It's magic.
+
+However `context` can be injected into Gatsby's GraphQL queries. Have a look at `skip` and `limit` at the pagination query below.
+
+```js
+  query blogListQuery($skip: Int!, $limit: Int!) {
+    allMarkdownRemark(
+      sort: { fields: [frontmatter___date], order: DESC }
+      limit: $limit
+      skip: $skip
+    ) {
+      ...MarkdownEdgesFragment
+    }
+  }
+```
+
+These context can **only** be created via Gatsby `createPages`. It's kind of a bummer, unless I'm reading [this](<(https://www.gatsbyjs.org/docs/page-query/)>) wrong.
+
+```js
+Array.from({ length: noOfPages }).forEach((_, i) => {
+  createPage({
+    path: `/list-${i + 1}`,
+    component: path.resolve("./src/templates/list.js"),
+    context: {
+      limit: postsPerPage,
+      skip: i * postsPerPage,
+      noOfPages: noOfPages,
+      currentPage: i + 1,
+    },
+  })
+})
+```
+
+On another twist
+
+https://github.com/gatsbyjs/gatsby/issues/12155
+
+Combining client side search with server rendered pagination in one page however is not straightforward. Both of them can be made to render two different thing, but at this point i'm not sure.
 
 ## 3. CSS Styling
 
@@ -67,106 +296,11 @@ module.exports = {
 }
 ```
 
-## 4. Gatsby's GraphQL
-
-For the better or worse, Gatsby is using their own version of GraphQL. That's why on the file where a GraphQL query is executed, usually there's this import
-
-```js
-import { graphql } from "gatsby"
-```
-
-Gatsby handles GraphQL fragments in slightly different way than standard GraphQL. Normally GraphQL fragments are imported, interpolated at the top of the GraphQL query and then used by spreading it. In Gatsby's GraphQL, the first and second steps are not needed as Gatsby crawls through all of your files and makes all fragments available in the query automagically. See the GraphQL query in `pages\index.js`
-
-```graphql
-export const query = graphql`
-  query HomePageQuery {
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
-      ...MarkdownEdgesFragment
-    }
-  }
-`
-```
-
-`MarkdownEdgesFragment` are not explicitly imported/interpolated anywhere and yet it can be used in the GraphQL query. It's magic.
-
-However `context` can be injected into Gatsby's GraphQL queries. Have a look at `skip` and `limit` at the pagination query below.
-
-```js
-  query blogListQuery($skip: Int!, $limit: Int!) {
-    allMarkdownRemark(
-      sort: { fields: [frontmatter___date], order: DESC }
-      limit: $limit
-      skip: $skip
-    ) {
-      ...MarkdownEdgesFragment
-    }
-  }
-```
-
-These context can **only** be created via Gatsby `createPage`. It's kind of a bummer, unless I'm reading [this](<(https://www.gatsbyjs.org/docs/page-query/)>) wrong.
-
-```js
-Array.from({ length: noOfPages }).forEach((_, i) => {
-  createPage({
-    path: `/list-${i + 1}`,
-    component: path.resolve("./src/templates/list.js"),
-    context: {
-      limit: postsPerPage,
-      skip: i * postsPerPage,
-      noOfPages: noOfPages,
-      currentPage: i + 1,
-    },
-  })
-})
-```
-
-On another twist
-
-https://github.com/gatsbyjs/gatsby/issues/12155
-
 ## 5. Pagination
 
 Now that we have taken a peek a how we do pagination above, you can find the rest described well enough at the guide on the [Gatsby](https://www.gatsbyjs.org/docs/adding-pagination/) site. Basically we need to create the pages using GraphQL queries and then query GraphQL again on each page to get the needed data.
 
 ## 6. Client Side Search
-
-I use [js-search](https://github.com/bvaughn/js-search) to power the search page. The concept it's quite simple, during the `post` pages creation, also build the context for the search page.
-
-In your `gatsby-node.js`'s `createPages`, put the following code
-
-```js
-const transformRemarkEdgeToPost = edge => ({
-  path: edge.node.frontmatter.path,
-  author: edge.node.frontmatter.author,
-  date: edge.node.frontmatter.date,
-  title: edge.node.frontmatter.title,
-  excerpt: edge.node.excerpt,
-  timeToRead: edge.node.timeToRead,
-})
-
-const posts = result.data.allMarkdownRemark.edges.map(transformRemarkEdgeToPost)
-
-createPage({
-  path: "/posts/",
-  component: path.resolve(`./src/templates/clientSearch.js`),
-  context: {
-    search: {
-      posts,
-      options: {
-        indexStrategy: "Prefix match",
-        searchSanitizer: "Lower Case",
-        TitleIndex: true,
-        AuthorIndex: true,
-        SearchByTerm: true,
-      },
-    },
-  },
-})
-```
-
-As for the react component, you
-
-Combining client side search with server rendered pagination in one page however is not straightforward. Both of them can be made to render two different thing, but at this point i'm not sure.
 
 ## 6. Code Highlighting
 
