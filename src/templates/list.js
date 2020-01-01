@@ -4,7 +4,6 @@ import Layout from "../components/layout"
 import { SearchResult } from "../components/clientSearch/searchResult"
 import { transformRemarkEdgeToPost } from "../libraries/transformer"
 import Pagination from "../components/pagination"
-import ClientSearch from "../components/clientSearch/index"
 
 const ListPage = props => {
   const posts = props.data.allMarkdownRemark.edges.map(

@@ -6,7 +6,7 @@ export const MarkdownEdgesFragment = graphql`
       node {
         frontmatter {
           title
-          date(formatString: "DD/MMMM/YYYY")
+          date(formatString: "DD MMMM YYYY")
           author
           path
         }
