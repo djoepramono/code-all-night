@@ -1,6 +1,6 @@
 ---
-path: "/posts/gatsby"
-title: "My Journey Creating a Gatsby Site with Search and Pagination"
+path: "/posts/gatsby-one-pager"
+title: "Gatsby One Pager"
 date: "2019-12-07"
 author: "Djoe Pramono"
 tag: "gatsby, notebook"
@@ -18,7 +18,7 @@ npm install --save-dev gatsby-cli
 
 Markdown files can be made into pages in Gatsby with the help of [gatsby-transformer-remark](https://www.gatsbyjs.org/packages/gatsby-transformer-remark/)
 
-```
+```bash
 npm install --save gatsby-transformer-remark \
   gatsby-source-filesystem
 ```
