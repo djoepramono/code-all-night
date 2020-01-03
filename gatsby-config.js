@@ -5,6 +5,20 @@ module.exports = {
     author: `@djoepramono`,
   },
   plugins: [
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-66674350-3",
+        // Defines where to place the tracking script - `true` in the head and `false` in the body
+        head: true,
+        anonymize: true,
+        respectDNT: true,
+        pageTransitionDelay: 0,
+        sampleRate: 5,
+        siteSpeedSampleRate: 10,
+        cookieDomain: "codeallnight.com",
+      },
+    },
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -47,20 +61,6 @@ module.exports = {
       resolve: `gatsby-plugin-styled-components`,
       options: {
         // Add any options here
-      },
-    },
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {        
-        trackingId: "UA-66674350-3",
-        // Defines where to place the tracking script - `true` in the head and `false` in the body
-        head: true,
-        anonymize: true,       
-        respectDNT: true,                
-        pageTransitionDelay: 0,        
-        sampleRate: 5,
-        siteSpeedSampleRate: 10,
-        cookieDomain: "codeallnight.com",
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
