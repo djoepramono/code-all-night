@@ -6,20 +6,20 @@ author: "Djoe Pramono"
 tag: "gatsby, notebook"
 ---
 
-How to build a Gatsby site? Why the guides online are so fragmented? Isn't there a one pager guide for [Gatsby](https://www.gatsbyjs.org/)? Well you have found it. This guide would help you build a gatsby with:
+How to build a Gatsby site? Why the guides online are so fragmented? Isn't there a one pager guide for [Gatsby](https://www.gatsbyjs.org/)? _Well_ you have found it. This one page guide would help you build a static site with:
 
 - [x] Markdown based blog post
 - [x] Client side search
 - [x] Pagination
 - [x] Google Analytics
 - [x] Code Highlighting
-- [x] Responsive design, _well we won't really cover this but you can look at the Github code._
+- [x] Responsive design, _well we won't really cover this but you can have a look at the Github code._
 
-If you'd like to see a working example, you can head off to https://www.codeallnight.com or take a peek at the [git repo](https://github.com/djoepramono/code-all-night) Well in fact, this guide will refer to it quite often.
+See it in action on https://www.codeallnight.com or take a peek at the [git repo](https://github.com/djoepramono/code-all-night). Feel free to clone and build upon the repo, just don't forget to empty the `src/posts` folder and start write your own.
 
 ## 1. Prerequisite
 
-First thing first, make sure you have `gatsby-cli` installed and then you can clone the repo and start the development server.
+First thing first, make sure you have `gatsby-cli` installed and it's advised that you clone the repo and start the development server.
 
 ```bash
 npm install -g gatsby-cli
@@ -31,11 +31,13 @@ gatsby develop -H 0.0.0.0
 
 Running `gatsby develop` only, makes the site only avaiable on the host computer via localhost. But sometimes you want to make it accessible to your local network, so that you can test your site with your mobile phone. For this, you need the `-H 0.0.0.0`.
 
+Each section on this guide might depends on a specific npm package. These packages are already included in the repo `package.json`. If you don't clone the repo and start fresh instead, make sure you install them.
+
 ## 2. Markdown Posts
 
 Markdown files can be made into pages in Gatsby with the help of [gatsby-transformer-remark](https://www.gatsbyjs.org/packages/gatsby-transformer-remark/)
 
-Put the markdown files into `src/posts`, there is some example there already. Next up you need to put the following entry into `gatsby-node.js`
+Put your markdown files into `src/posts`. _There are some examples there already_. Next up you need to put the following entry into `gatsby-node.js`
 
 ```js
 exports.createPages = async ({ actions, graphql, reporter }) => {
@@ -133,7 +135,9 @@ Now you hopefully you know the concept of passing data into pages via `context`.
 
 ## 3. List Page with Pagination
 
-Next up we are going to create a list page with pagination. Put the following into `gatsby-node.js`'s `createPages` function
+Next up we are going to create a list page with pagination. The [default Gatsby guide](https://www.gatsbyjs.org/docs/adding-pagination/) is good enough, but I went slightly further.
+
+Put the following into `gatsby-node.js`'s `createPages` function
 
 ```js
 const postsPerPage = config.noOfPostsPerPage
@@ -204,11 +208,11 @@ export const listQuery = graphql`
 
 This result of the call is then available in the bespoke React component's `props.data.allMarkdownRemark.edges`
 
-What do learn here? It's possible after you passed some metadata to the page through `context`, you can use it to make another GraphQL call. This is a powerful concept which allows you to do extra things in the page.
+What do learn here? It's possible after you passed some metadata to the page through `context`, e.g. `skip` and `limit` you can use them to make another GraphQL call. This is a powerful concept which allows you to add more data into the page.
 
 But what is `...MarkdownEdgesFragment`? It's GraphQL [fragment](https://www.apollographql.com/docs/react/data/fragments/). But it behaves slightly differently in Gatsby.
 
-## 4.Fragment
+## 4. Fragment
 
 For the better or worse, Gatsby is using their own version of GraphQL. That's why on the file where a GraphQL query is executed, usually there's this import
 
@@ -217,6 +221,8 @@ import { graphql } from "gatsby"
 ```
 
 Gatsby handles GraphQL fragments in slightly different way than standard GraphQL. Normally GraphQL fragments are imported, interpolated at the top of the GraphQL query and then used by spreading it. In Gatsby's GraphQL, the first and second steps are not needed as Gatsby crawls through all of your files and makes all fragments available in the query automagically.
+
+Let's look back at `src/templates/list.js`
 
 ```graphql
 export const query = graphql`
@@ -228,52 +234,13 @@ export const query = graphql`
 `
 ```
 
-`MarkdownEdgesFragment` are not explicitly imported/interpolated anywhere and yet it can be used in the GraphQL query. It's magic.
+`MarkdownEdgesFragment` is not explicitly imported/interpolated anywhere and yet it can be used in the GraphQL query. It's magic.
 
-However `context` can be injected into Gatsby's GraphQL queries. Have a look at `skip` and `limit` at the pagination query below.
+## 5. CSS Styling
 
-```js
-  query blogListQuery($skip: Int!, $limit: Int!) {
-    allMarkdownRemark(
-      sort: { fields: [frontmatter___date], order: DESC }
-      limit: $limit
-      skip: $skip
-    ) {
-      ...MarkdownEdgesFragment
-    }
-  }
-```
+Gatsby by default uses CSS Modules. However I prefer to use [Styled Components](https://www.styled-components.com/). There's a gotcha though. From my experience, sometimes in production the produced css is just missing even though everything is fine when run via `gatsby develop`. This happens most often on the first page load.
 
-These context can **only** be created via Gatsby `createPages`. It's kind of a bummer, unless I'm reading [this](<(https://www.gatsbyjs.org/docs/page-query/)>) wrong.
-
-```js
-Array.from({ length: noOfPages }).forEach((_, i) => {
-  createPage({
-    path: `/list-${i + 1}`,
-    component: path.resolve("./src/templates/list.js"),
-    context: {
-      limit: postsPerPage,
-      skip: i * postsPerPage,
-      noOfPages: noOfPages,
-      currentPage: i + 1,
-    },
-  })
-})
-```
-
-On another twist
-
-https://github.com/gatsbyjs/gatsby/issues/12155
-
-Combining client side search with server rendered pagination in one page however is not straightforward. Both of them can be made to render two different thing, but at this point i'm not sure.
-
-## 3. CSS Styling
-
-It's using CSS Modules, personally though I prefer to use CSS-in-JS
-
-There's a gotcha though. From my experience, the css would work with `gatsby develop`. But in production, sometimes it is not there. This happens most often on the first page load.
-
-The solution
+How did I fixed it? Apparently I was missing a module. So make sure that these 3 are installed.
 
 ```bash
 npm install --save gatsby-plugin-styled-components \
@@ -296,15 +263,9 @@ module.exports = {
 }
 ```
 
-## 5. Pagination
-
-Now that we have taken a peek a how we do pagination above, you can find the rest described well enough at the guide on the [Gatsby](https://www.gatsbyjs.org/docs/adding-pagination/) site. Basically we need to create the pages using GraphQL queries and then query GraphQL again on each page to get the needed data.
-
-## 6. Client Side Search
-
 ## 6. Code Highlighting
 
-To highlight code in web pages, I found [PrismJs](https://prismjs.com/) seems to be popular and easy enough to use. Based on this [tutorial](https://dev.to/fidelve/the-definitive-guide-for-using-prismjs-in-gatsby-4708), you can either use [gatsby-remark-prismjs](https://www.gatsbyjs.org/packages/gatsby-remark-prismjs/) or set it up manually like so:
+To highlight code in the posts, I found [PrismJs](https://prismjs.com/) seems to be popular and easy enough to use. Based on this [tutorial](https://dev.to/fidelve/the-definitive-guide-for-using-prismjs-in-gatsby-4708), you can either use [gatsby-remark-prismjs](https://www.gatsbyjs.org/packages/gatsby-remark-prismjs/) or set it up manually like so:
 
 Install the dependencies from the command line
 
@@ -367,7 +328,7 @@ There are several important things here.
 - Google Tag Assistant prefer the tracking script to be put in `<head>`, thus `head:true`
 - The plugin must be put as **the first plugin** in `plugins` array. I missed this at my first attempt.
 
-Originally I tried to follow  [this default guide](https://www.gatsbyjs.org/packages/gatsby-plugin-google-analytics/) but it did not work, as I couldn't see any traffic on [Google Tag Assistant](https://get.google.com/tagassistant/). It simply says `No HTTP response detected`. Once I switch to Gatsby Plugin GTag, I can see the tracking data on Google Analytics **real time**.
+Originally I tried to follow  [this default guide](https://www.gatsbyjs.org/packages/gatsby-plugin-google-analytics/) but it did not work, as I couldn't see any traffic on [Google Tag Assistant](https://get.google.com/tagassistant/). It simply says `No HTTP response detected`. Once I switch to Gatsby Plugin GTag, I can see the tracking data on Google Analytics **real time**. I am not 100% certain why but it's probably related to [analytics.js being deprecated](https://developers.google.com/analytics/devguides/collection/gtagjs/migration)
 
 ## 8. Trailing slash
 
