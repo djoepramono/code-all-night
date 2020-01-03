@@ -339,25 +339,18 @@ useEffect(() => {
 
 ## 7. Google Analytics
 
-A website without any tracking is not complete. Google Analytics is probably one of the easiest tracking tool to use and so far [this guide](https://www.gatsbyjs.org/packages/gatsby-plugin-google-analytics/) is good enough.
+A website without any tracking is not complete. Code All Night is implementing Google Analytics via [Gatsby Plugin GTag](https://www.gatsbyjs.org/packages/gatsby-plugin-gtag/). 
 
-Basically install the plugin
-
-```bash
-npm install --save gatsby-plugin-google-analytics
-```
-
-and add the following to `gatsby-config.js`
+Add the following to `gatsby-config.js`
 
 ```js
 module.exports = {
   plugins: [
     {
-      resolve: `gatsby-plugin-google-analytics`,
+      resolve: `gatsby-plugin-gtag`,
       options: {
-        trackingId: "YOUR_GOOGLE_ANALYTICS_TRACKING_ID",
-        // Defines where to place the tracking script - `true` in the head and `false` in the body
-        head: false,
+        trackingId: "YOUR_GOOGLE_ANALYTICS_ID",        
+        head: true,
         anonymize: true,
         respectDNT: true,
         pageTransitionDelay: 0,
@@ -370,7 +363,11 @@ module.exports = {
 }
 ```
 
-And that's it! You don't need to copy paste the tracking script from Google, the plugin will create the equivalent script for you.
+There are several important things here. 
+- Google Tag Assistant prefer the tracking script to be put in `<head>`, thus `head:true`
+- The plugin must be put as **the first plugin** in `plugins` array. I missed this at my first attempt.
+
+Originally I tried to follow  [this default guide](https://www.gatsbyjs.org/packages/gatsby-plugin-google-analytics/) but it did not work, as I couldn't see any traffic on [Google Tag Assistant](https://get.google.com/tagassistant/). It simply says `No HTTP response detected`. Once I switch to Gatsby Plugin GTag, I can see the tracking data on Google Analytics **real time**.
 
 ## 8. Trailing slash
 
