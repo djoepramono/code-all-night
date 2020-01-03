@@ -6,7 +6,7 @@ module.exports = {
   },
   plugins: [
     {
-      resolve: `gatsby-plugin-google-analytics`,
+      resolve: `gatsby-plugin-gtag`,
       options: {
         trackingId: "UA-66674350-3",
         // Defines where to place the tracking script - `true` in the head and `false` in the body
@@ -16,7 +16,7 @@ module.exports = {
         pageTransitionDelay: 0,
         sampleRate: 5,
         siteSpeedSampleRate: 10,
-        cookieDomain: "codeallnight.com",
+        cookieDomain: "www.codeallnight.com",
       },
     },
     `gatsby-plugin-react-helmet`,
