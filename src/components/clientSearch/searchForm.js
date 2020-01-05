@@ -16,7 +16,7 @@ export const SearchForm = ({ searchQuery, handleSubmit, searchData }) => {
         id="Search"
         value={searchQuery}
         onChange={searchData}
-        placeholder="Search a post e.g. git"
+        placeholder="Search a post e.g. gatsby"
       />
     </form>
   )
