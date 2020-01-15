@@ -3,7 +3,7 @@ path: "/posts/gatsby-one-pager"
 title: "Gatsby One Pager"
 date: "2020-01-05"
 author: "Djoe Pramono"
-tags: ["gatsby", "javascript"]
+tags: ["gatsby", "javascript", "react"]
 ---
 
 How to build a [Gatsby](https://www.gatsbyjs.org/) site? Why the guides online are so fragmented? Isn't there a one pager guide for Gatsby with a working example? _Well_ you have found it. This one page guide would help you build a static site with:
