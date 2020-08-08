@@ -14,7 +14,7 @@ It's still a work in progress with more stuffs coming soon. Meanwhile feel free 
 # Development
 
 ```
-gatsby develop
+gatsby develop -H 0.0.0.0
 ```
 
 For more information please refer to the [guide](https://www.codeallnight.com/posts/gatsby-one-pager)

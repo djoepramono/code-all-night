@@ -25,7 +25,7 @@ a {
 }
 body {
   color: hsla(0, 0%, 0%, 0.8);
-  font-family: Cabin, serif;
+  font-family: Roboto, Cabin, serif;
   font-weight: normal;
   word-wrap: break-word;
   font-kerning: normal;
@@ -33,4 +33,28 @@ body {
   -ms-font-feature-settings: "kern", "liga", "clig", "calt";
   -webkit-font-feature-settings: "kern", "liga", "clig", "calt";
   font-feature-settings: "kern", "liga", "clig", "calt";
+}
+
+h2 {
+  padding-top: 1.5rem;
+  font-size: larger;
+}
+
+h3 {
+  padding-top: 1rem;
+  font-size: large;
+}
+
+p {
+  font-size: medium;
+}
+
+table {
+  border: black 1px solid;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.5rem;
+  border: black 1px solid;
 }
