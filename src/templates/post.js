@@ -48,13 +48,13 @@ const PostTemplate = ({
 }
 
 export const pageQuery = graphql`
-  query($path: String!) {
+  query($markdownPath: String!) {
     site {
       siteMetadata {
         title
       }
     }
-    markdownRemark(frontmatter: { path: { eq: $path } }) {
+    markdownRemark(frontmatter: { path: { eq: $markdownPath } }) {
       html
       frontmatter {
         date(formatString: "DD MMMM YYYY")

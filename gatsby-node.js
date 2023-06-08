@@ -64,7 +64,9 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     createPage({
       path: node.frontmatter.path,
       component: blogPostTemplate,
-      context: {}, // additional data can be passed via context
+      context: {
+        markdownPath: node.frontmatter.path
+      }, // additional data can be passed via context, query input is passed this way
     })
   })
 
