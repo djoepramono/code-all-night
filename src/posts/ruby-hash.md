@@ -1,9 +1,8 @@
 ---
 path: "/posts/ruby-hash"
-title: Ruby Hash
-author: Djoe Pramono
+title: "Ruby Hash"
+author: "Djoe Pramono"
 date: "2016-09-14"
-categories: ruby
 ---
 
 A **hash** is an associative array, which is pretty much an array with key-value pairs of which the keys are unique.

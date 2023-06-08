@@ -27,7 +27,7 @@ export default ListPage
 export const listQuery = graphql`
   query listQuery($skip: Int!, $limit: Int!) {
     allMarkdownRemark(
-      sort: { fields: [frontmatter___date], order: DESC }
+      sort: {frontmatter: {date: DESC}}
       limit: $limit
       skip: $skip
     ) {

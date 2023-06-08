@@ -1,11 +1,8 @@
 ---
 path: "/posts/git-rebase"
-title: GIT Rebase
+title: "GIT Rebase"
 date: "2016-09-07"
-author: Djoe Pramono
-notebook: GIT
-tags: git
-categories: git
+author: "Djoe Pramono"
 ---
 
 In order to rewrite history you need to use `git rebase -i <commit_id>`.
