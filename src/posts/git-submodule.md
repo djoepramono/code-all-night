@@ -1,8 +1,8 @@
 ---
 path: "/posts/git-submodule"
-title: GIT Filter Branch
+title: "GIT Filter Branch"
 date: "2019-10-07"
-author: Djoe Pramono
+author: "Djoe Pramono"
 ---
 
 Ever committed a folder that shouldn't be a GIT? e.g. `node_modules`, `lib`, `vendor`, etc.
