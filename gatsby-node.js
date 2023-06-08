@@ -30,28 +30,29 @@ const createListPageParameter = (
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions
-  const blogPostTemplate = path.resolve(`src/templates/post.js`)
+  const blogPostTemplate = path.resolve(`./src/templates/post.js`)
   const result = await graphql(`
     {
       allMarkdownRemark(
-        sort: { order: DESC, fields: [frontmatter___date] }
+        sort: {frontmatter: {date: DESC}}
         limit: 1000
       ) {
         edges {
           node {
+            excerpt(format: MARKDOWN)
             frontmatter {
               title
               date(formatString: "DD MMMM YYYY")
               author
               path
             }
-            excerpt
             timeToRead
           }
         }
       }
     }
   `)
+
   // Handle errors
   if (result.errors) {
     reporter.panicOnBuild(`Error while running GraphQL query.`)
