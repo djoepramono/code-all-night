@@ -3,8 +3,11 @@ path: "/posts/a-case-study-of-date-and-time"
 title: "A Case Study of Date and Time"
 date: "2020-08-08"
 author: "Djoe Pramono"
+cover: "../media/tyler-harris-dJHh3fxXuK4-unsplash.jpg"
 tags: ["system-design", "sql", "data"]
 ---
+
+![](./media/tyler-harris-dJHh3fxXuK4-unsplash.jpg)
 
 In IT, dealing with date and time, can be quite challenging. There are a lot of things to consider and things can be quite complicated especially when you need to make changes to an already existing system.
 The purpose of this blog post is to surface the importance of thinking about your data type more carefully, especially when you are dealing with date and time.

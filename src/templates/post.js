@@ -6,6 +6,7 @@ import styled from "styled-components"
 import { font } from "../components/helper"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import { GatsbyImage, getImage } from "gatsby-plugin-image"
 
 const PostContainer = styled.article``
 
@@ -23,11 +24,17 @@ const PostContent = styled.div`
   padding-top: 0.5em;
 `
 
+const PostCover = styled(GatsbyImage)`
+  width: 100%
+`
+
 const PostTemplate = ({
   data, // this prop will be injected by the GraphQL query below.
 }) => {
   const { markdownRemark } = data // data.markdownRemark holds your post data
   const { frontmatter, html, timeToRead } = markdownRemark
+
+  const featuredImg = getImage(frontmatter.cover?.childImageSharp?.gatsbyImageData)
 
   useEffect(() => {
     Prism.highlightAll()
@@ -41,6 +48,7 @@ const PostTemplate = ({
         <PostMetaData>
           By {frontmatter.author}, {frontmatter.date} ({timeToRead} min read)
         </PostMetaData>
+        <PostCover image={featuredImg} alt="cover" />
         <PostContent dangerouslySetInnerHTML={{ __html: html }}></PostContent>
       </PostContainer>
     </Layout>
@@ -61,6 +69,11 @@ export const pageQuery = graphql`
         author
         path
         title
+        cover {
+          childImageSharp {
+            gatsbyImageData(width: 800)
+          }
+        }
       }
       timeToRead
     }
