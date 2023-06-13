@@ -42,10 +42,20 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-google-fonts`,
+      resolve: `gatsby-omni-font-loader`,
       options: {
-        fonts: [`Roboto`],
-        display: "swap",
+        enableListener: true,
+        preconnect: [`https://fonts.googleapis.com`, `https://fonts.gstatic.com`],
+        web: [
+          {
+            name: `Jost`,
+            file: `https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap`,
+          },
+          {
+            name: `Lato`,
+            file: `https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700&display=swap`,
+          },
+        ],
       },
     },
     "gatsby-plugin-react-helmet",
