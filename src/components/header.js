@@ -5,40 +5,44 @@ import styled from "styled-components"
 import { screen, color } from "./helper"
 import { FixedLogo } from "./logo/fixedLogo"
 
-const Wrapper = styled.header`
-  @media ${screen.tabletOrLarger} {
-    display: none;
-  }
-`
-
 const HeaderStrip = styled.div`
   min-height: 60px;
   padding: 0 1.5em;
-  background-color: ${color.dimmedBlack};
+  background-color: ${color.darkerBlue};
 
   display: flex;
   align-items: center;
 `
 
-const LogoWrapper = styled.div``
-
-const HeaderLink = styled(Link)`
+const HomepageLink = styled(Link)`
   color: ${color.lightBlue};
   text-decoration: none;
   margin-left: 15px;
   flex-grow: 1;
 `
 
+const HeaderLink = styled(Link)`
+  color: ${color.dimmedBlack};
+  text-decoration: none;
+
+  &:hover {
+    color: white;
+  }
+`
+
 const HeaderMenu = styled.div`
-  color: ${color.lightBlue};
   width: 100px;
-  padding: 0.5em;  
+  padding: 0.5em;
+
+  @media ${screen.phone} {
+    display: none;
+  }
 `
 
 const MenuDropDown = styled.div`
   flex-direction: column;
 
-  background-color: ${color.dimmedBlack};
+  background-color: ${color.darkerBlue};
   width: 100px;
   color: ${color.lightBlue};
   position: absolute;
@@ -71,10 +75,13 @@ class Header extends React.Component {
 
   render() {
     return (
-      <Wrapper>
+      <>
         <HeaderStrip>
           <FixedLogo />
-          <HeaderLink to="/">{this.props.siteTitle}</HeaderLink>
+          <HomepageLink to="/">{this.props.siteTitle}</HomepageLink>
+          <HeaderMenu><HeaderLink to="/list-1">Posts</HeaderLink></HeaderMenu>
+          <HeaderMenu><HeaderLink to="/posts">Search</HeaderLink></HeaderMenu>
+          <HeaderMenu><HeaderLink to="/about">About</HeaderLink></HeaderMenu>
           <HeaderMenu isExpanded={this.state.isMenuExpanded} onClick={this.toggleMenu}>
             {this.state.isMenuExpanded ? `Less` : `More`}
           </HeaderMenu>
@@ -83,7 +90,7 @@ class Header extends React.Component {
           <MenuDropDownLink to="/posts">Search</MenuDropDownLink>
           <MenuDropDownLink to="/about">About</MenuDropDownLink>
         </MenuDropDown>
-      </Wrapper>
+      </>
     )
   }
 }

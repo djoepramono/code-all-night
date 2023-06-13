@@ -9,13 +9,11 @@ const LogoWrapper = styled.div`
 `
 
 const Wrapper = styled.div`
-  min-width: 250px;
-  height: 100vh;
-  background-color: ${color.dimmedBlack};
-  color: ${color.lightBlue};
+  min-width: 200px;
+
+  color: ${color.strongGreen};
   text-align: center;
 
-  display: flex;
   flex-direction: column;
 
   @media ${screen.phone} {
@@ -31,14 +29,13 @@ const Top = styled.div`
   justify-content: center;
 `
 
-const Middle = styled.div`
-  flex-grow: 1;
-`
+const Outbound = styled.div`
+  color: ${color.darkerBlue};
+  padding: 5px;
 
-const Bottom = styled.div`
-  height: 100px;
-  padding: 10px;
-  font-size: ${font.small};
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
 `
 
 const Menu = styled.nav`
@@ -46,7 +43,7 @@ const Menu = styled.nav`
 `
 
 const StyledLink = styled(Link)`
-  color: ${color.lightBlue};
+  color: ${color.darkerBlue};
   text-decoration: none;
 `
 
@@ -57,15 +54,13 @@ const Sidebar = ({ homeLink }) => (
         <FluidLogo />
       </LogoWrapper>
     </Top>
-    <Middle>
-      <Menu><StyledLink to="/list-1">POSTS</StyledLink></Menu>
-      <Menu><StyledLink to="/posts/">SEARCH</StyledLink></Menu>
-      <Menu><StyledLink to="/about">ABOUT</StyledLink></Menu>
-    </Middle>
-    <Bottom>
-      <div>Code All Night</div>
-      <div>© {new Date().getFullYear()}</div>
-    </Bottom>
+    <Outbound>
+      Where to find us:
+      <Menu><StyledLink to="/list-1">TWITTER</StyledLink></Menu>
+      <Menu><StyledLink to="/list-1">GITHUB</StyledLink></Menu>
+      <Menu><StyledLink to="/posts/">MEDIUM</StyledLink></Menu>
+      <Menu><StyledLink to="/about">DEV.TO</StyledLink></Menu>
+    </Outbound>
   </Wrapper>
 )
 

@@ -9,7 +9,6 @@ const Wrapper = styled.div`
 
   text-align: center;
   margin-top: 1em;
-  width 100%;
 `
 
 const PaginationLink = styled(Link)`
